@@ -10,16 +10,14 @@ public class Explorer implements CanvasArrayHolder {
 		this.coordinates = coordinates;
 		this.holderType = holderType;
 	}
-	@Override
+	
 	public HolderType getHolderType() {
 		// TODO Auto-generated method stub
 		return holderType;
 	}
 
-	@Override
 	public Coordinates getCoordinates() {
 		// TODO Auto-generated method stub
 		return coordinates;
 	}
-
 }

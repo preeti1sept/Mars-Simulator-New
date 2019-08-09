@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,6 +28,8 @@ public class MainSimulator {
 	public static void main(String[] args) throws IOException, IllegalAccessException {
 		LOG.log(Level.INFO, "Mars Simulator Start");
 		String fileName = null;
+		fileName = "sampledata.txt";
+
 		for (int param = 0; param < args.length; param++) {
 			if (fileName == null)
 				fileName = args[param];
@@ -167,22 +170,36 @@ public class MainSimulator {
 	 */
 	public static List<InputCommands> commandMapper(List<String> contents) throws IllegalAccessException {
 		List<InputCommands> commands = new ArrayList<InputCommands>();
+		String commandName = null;
 		if (!contents.isEmpty()) {
 			for (String line : contents) {
 				line = line.trim();
 				if (line.startsWith("PLACE") || line.startsWith("BLOCK") || line.startsWith("EXPLORE")) {
 					String[] rowCols = line.split("\\s++");
-					String commandName = rowCols[0];
-					String[] points = rowCols[1].split(",");
+					commandName = rowCols[0];
+					String[] points = new String[4];
+					if(rowCols.length<=1)
+					{
+						points[0] = "1";
+						points[1] = "1";
+						
+					}
+					else
+					points = rowCols[1].split(",");
 					commands.add(
 							new InputCommands(commandName, Integer.parseInt(points[0]), Integer.parseInt(points[1])));
 				} else if (line.startsWith("REPORT")) {
 					commands.add(new InputCommands(line));
-				} else {
-					/*throw new IllegalAccessException(
+				} else {					/*throw new IllegalAccessException(
 							"The command specified is invalid. Your command must be one of PLACE,BLOCK,EXPLORE or REPORT");*/
 					LOG.log(Level.WARNING,"Please provide place command to run the program");
 				}
+				if(!line.contains("PLACE"))
+				{
+					commands.add(
+							new InputCommands("PLACE", 0,0));
+				}
+
 			}
 		}
 		return commands;
